@@ -8,10 +8,10 @@ orbs:
 executors:
   golang:
     docker:
-      - image: circleci/golang:1.12
+      - image: circleci/golang:1.17
   golang-node:
     docker:
-      - image: circleci/golang:1.12-node
+      - image: circleci/golang:1.17-node
   python-node:
     docker:
       - image: circleci/python:3.7-node
@@ -94,7 +94,7 @@ jobs:
       - run:
           name: Build the exporter Docker image if it does not exist
           command: |
-            export IMAGE_TAG="nexus.in.ft.com:5000/operations-reliability/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1"
+            export IMAGE_TAG="nexus.in.ft.com:5000/monitoring-aggregation-ecs/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1"
             docker pull "$IMAGE_TAG" >/dev/null 2>&1 || true
             if $(docker image inspect "$IMAGE_TAG" >/dev/null 2>&1); then
               echo "Skipping build as image exists for git sha \"$CIRCLE_SHA1\""
@@ -154,20 +154,20 @@ workflows:
             - install
 
       - build-image:
-          context: 
+          context:
             - monitoring-agg-ecs-prod
             - dockerhub-shared
           requires:
             - install
 
       - ft-snyk-orb/scan-go-packages:
-          context: rel-eng-creds
+          context: monitoring-agg-ecs-prod
           requires:
             - install
             - build-image
 
       - publish-revision:
-          context: 
+          context:
             - monitoring-agg-ecs-prod
             - dockerhub-shared
           requires:
@@ -194,7 +194,7 @@ workflows:
           requires:
             - deploy_test_service
           systemCode: "prometheus-ecs-discovery"
-          slackChannels: rel-eng-changes
+          slackChannels: infra-delivery-builds
           environment: "test"
           filters:
             branches:
@@ -217,7 +217,7 @@ workflows:
           requires:
             - deploy_prod_service
           systemCode: "prometheus-ecs-discovery"
-          slackChannels: rel-eng-changes
+          slackChannels: infra-delivery-builds
           environment: "prod"
           filters:
             branches:
@@ -225,7 +225,7 @@ workflows:
                 - master
 
       - ft-snyk-orb/scan-and-monitor-go-packages:
-          context: rel-eng-creds
+          context: monitoring-agg-ecs-prod
           requires:
             - deploy_prod_service
           filters:
@@ -234,7 +234,7 @@ workflows:
                 - master
 
       - ft-snyk-orb/scan-and-monitor-docker-images:
-          context: rel-eng-creds
+          context: monitoring-agg-ecs-prod
           requires:
             - deploy_prod_service
           filters:

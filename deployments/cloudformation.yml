@@ -2,7 +2,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Description: >
-  Prometheus ECS service discovery service for Operations & Reliability, runs on the existing ECS cluster.
+  Prometheus ECS service discovery service for Monitoring Aggregation ECS, runs on the existing ECS cluster.
 
 Parameters:
   SplunkHecToken:
@@ -41,7 +41,7 @@ Resources:
       TaskRoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/${TaskRoleName}
       ContainerDefinitions:
         - Name: !Sub "${ServiceName}-eu-west-1-service"
-          Image: !Sub "nexus.in.ft.com:5000/operations-reliability/${DockerImageName}:${DockerRevision}"
+          Image: !Sub "nexus.in.ft.com:5000/monitoring-aggregation-ecs/${DockerImageName}:${DockerRevision}"
           Command:
             - -config.scrape-interval=1m0s
             - -config.scrape-times=0
@@ -72,7 +72,7 @@ Resources:
               labels: org.opencontainers.revision,org.opencontainers.created,com.ft.build-number,com.ft.service-name,com.ft.service-region
 
         - Name: !Sub "${ServiceName}-us-east-1-service"
-          Image: !Sub "nexus.in.ft.com:5000/operations-reliability/${DockerImageName}:${DockerRevision}"
+          Image: !Sub "nexus.in.ft.com:5000/monitoring-aggregation-ecs/${DockerImageName}:${DockerRevision}"
           Command:
             - -config.scrape-interval=1m0s
             - -config.scrape-times=0
@@ -94,7 +94,7 @@ Resources:
           LogConfiguration:
             LogDriver: splunk
             Options:
-              splunk-source: !Sub "${ServiceName}-us-east-1.${AWS::Region}.in.ft.com"
+              splunk-source: !Sub "${ServiceName}-us-east-1.${AWS::Region}.monitoring.ftops.tech"
               splunk-url: https://http-inputs-financialtimes.splunkcloud.com
               splunk-token: !Ref SplunkHecToken
               splunk-format: json
