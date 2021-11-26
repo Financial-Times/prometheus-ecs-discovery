@@ -1,4 +1,4 @@
-ARG GO_VERSION=1.12
+ARG GO_VERSION=1.17
 
 # Step 1: Install CA certificates and setup Go binary build
 FROM golang:${GO_VERSION}-alpine AS build
@@ -46,9 +46,9 @@ ARG BUILD_DATE
 ARG BUILD_NUMBER
 ARG VCS_SHA
 
-LABEL maintainer="reliability.engineering@ft.com" \
+LABEL maintainer="edge.delivery.observability@ft.com" \
     com.ft.build-number="$BUILD_NUMBER" \
-    org.opencontainers.authors="reliability.engineering@ft.com" \
+    org.opencontainers.authors="edge.delivery.observability@ft.com" \
     org.opencontainers.created="$BUILD_DATE" \
     org.opencontainers.licenses="MIT" \
     org.opencontainers.revision="$VCS_SHA" \

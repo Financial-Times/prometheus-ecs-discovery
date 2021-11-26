@@ -25,6 +25,7 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
+	"golang.org/x/term"
 
 	"github.com/aws/aws-sdk-go-v2/aws/awserr"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
@@ -33,7 +34,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/go-yaml/yaml"
-	"golang.org/x/crypto/ssh/terminal"
 )
 
 type labels struct {
@@ -590,7 +590,7 @@ func main() {
 	svc := ecs.New(config)
 	svcec2 := ec2.New(config)
 
-	if !terminal.IsTerminal(int(os.Stdout.Fd())) {
+	if !term.IsTerminal(int(os.Stdout.Fd())) {
 		log.SetFormatter(&log.JSONFormatter{})
 	}
 
