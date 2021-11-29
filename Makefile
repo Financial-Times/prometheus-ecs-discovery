@@ -11,7 +11,7 @@ UPPER_CASE_REPO_NAME = $(shell $(	REPO_NAME) | sed -r 's/\<./\U&/g')
 AWS := $(shell command aws --version 2> /dev/null)
 DONE = printf '%b\n' ">> $(GREEN)$@ done ✓"
 
-DOCKER_TEAM_NAME ?= operations-reliability
+DOCKER_FOLDER ?= monitoring-aggregation-ecs
 DOCKER_TAG ?= latest
 
 ifneq ("$(CIRCLE_SHA1)", "")
@@ -35,7 +35,7 @@ endif
 ENVIRONMENT ?= prod
 ifeq ($(ENVIRONMENT),prod)
 SERVICE_NAME = "$(REPO_NAME)"
-else 
+else
 SERVICE_NAME = "$(REPO_NAME)-test"
 endif
 
@@ -91,8 +91,8 @@ run: ## Run the Docker image.
 
 publish: ## Push the docker image to the FT private repository.
 	@printf '%b\n' ">> $(TEAL)pushing the docker image"
-	docker tag "financial-times/$(REPO_NAME):$(VCS_SHA)" "nexus.in.ft.com:5000/$(DOCKER_TEAM_NAME)/$(REPO_NAME):$(DOCKER_TAG)"
-	docker push "nexus.in.ft.com:5000/$(DOCKER_TEAM_NAME)/$(REPO_NAME):$(DOCKER_TAG)"
+	docker tag "financial-times/$(REPO_NAME):$(VCS_SHA)" "nexus.in.ft.com:5000/$(DOCKER_FOLDER)/$(REPO_NAME):$(DOCKER_TAG)"
+	docker push "nexus.in.ft.com:5000/$(DOCKER_FOLDER)/$(REPO_NAME):$(DOCKER_TAG)"
 	@$(DONE)
 
 validate-aws-stack-command:
@@ -116,7 +116,7 @@ deploy-stack: validate-aws-stack-command ## Create the cloudformation stack
 		--tags \
         	environment="$(ENVIRONMENT)" \
         	systemCode="$(REPO_NAME)" \
-        	teamDL="reliability.engineering@ft.com"
+        	teamDL="edge.delivery.observability@ft.com"
 	@$(DONE)
 
 help: ## Show this help message.

@@ -2,6 +2,7 @@
     Written in the format prescribed by https://github.com/Financial-Times/runbook.md.
     Any future edits should abide by this format.
 -->
+
 # Prometheus ECS Discovery
 
 A service which runs on AWS ECS and collates a list of containers also running on AWS ECS so Prometheus can scrape them.
@@ -33,7 +34,7 @@ AWS ECS
 
 ## First Line Troubleshooting
 
-It may be useful to view the latest targets Prometheus has read from the written config file using the targets interface for the [EU](https://prometheus-eu-west-1.in.ft.com/targets#job-application) and [US](https://prometheus-us-east-1.in.ft.com/targets#job-application) prometheus instances. If this list does not contain any instances, or does not contain the expected instance, it is likely there is an issue with the running of the ECS discovery service, or accessing the ECS API in a given region.
+It may be useful to view the latest targets Prometheus has read from the written config file using the targets interface for the [EU](https://prometheus-eu-west-1.monitoring.ftops.tech/targets#job-application) and [US](https://prometheus-us-east-1.monitoring.ftops.tech/targets#job-application) prometheus instances. If this list does not contain any instances, or does not contain the expected instance, it is likely there is an issue with the running of the ECS discovery service, or accessing the ECS API in a given region.
 
 AWS credentials are obtained using an ECS task role and so should not require keys or require human intervention due to expiry.
 
@@ -45,14 +46,14 @@ The service discovery component runs two containers per task: each collects serv
 
 ## Monitoring
 
-The Heimdall Prometheus has some bespoke alarms which are sent to the [#rel-eng-alerts](https://financialtimes.slack.com/messages/C8QL0GY9J) Slack via alertmanager.
+The Heimdall Prometheus has some bespoke alarms which are sent to the [#infra-delivery-alerts](https://financialtimes.slack.com/archives/C4U3YEZBJ) Slack via alertmanager.
 
-These are visible in the [Alertmanager UI](https://alertmanager.in.ft.com/) if they are firing.
+These are visible in the [Alertmanager UI](https://alertmanager.monitoring.ftops.tech/) if they are firing.
 
 There are several Grafana dashboards:
 
-*   [AWS ECS Task metrics](http://grafana.ft.com/d/YCsaeAFiz/aws-ecs-operations-and-reliability?orgId=1&var-region=eu-west-1&var-cluster=mon-agg-ecs&var-service=mon-agg-ecs-service-prometheus-ecs-discovery-Service-1OY1CGBRU4NXW) (`us-east-1` metrics are available using the dropdowns).
-*   [Go language runtime metrics](http://grafana.ft.com/d/c0mUzOcmz/go-processes?orgId=1&var-system=prometheus-ecs-discovery-exporter&var-cluster_name=All&var-container=prometheus-ecs-discovery-exporter-service&var-task_revision=All&var-instance=All&var-interval=10m) - note: this dashboard is based on metrics from containers discovered using this service, and may indicate what targets are available.
+* [AWS ECS Task metrics](http://grafana.ft.com/d/YCsaeAFiz/aws-ecs-operations-and-reliability?orgId=1&var-region=eu-west-1&var-cluster=mon-agg-ecs&var-service=mon-agg-ecs-service-prometheus-ecs-discovery-Service-1OY1CGBRU4NXW) (`us-east-1` metrics are available using the dropdowns).
+* [Go language runtime metrics](http://grafana.ft.com/d/c0mUzOcmz/go-processes?orgId=1&var-system=prometheus-ecs-discovery-exporter&var-cluster_name=All&var-container=prometheus-ecs-discovery-exporter-service&var-task_revision=All&var-instance=All&var-interval=10m) - note: this dashboard is based on metrics from containers discovered using this service, and may indicate what targets are available.
 
 Logs are available in [Splunk](https://financialtimes.splunkcloud.com/en-GB/app/search/search?q=search%20index%3D%22operations-reliability%22%20attrs.com.ft.service-name%3D%22prometheus-ecs-discovery*%22%20attrs.com.ft.service-region%3D%22*%22&display.page.search.mode=verbose&dispatch.sample_ratio=1&earliest=-1h&latest=now) via the query:
 
@@ -122,15 +123,15 @@ Manual
 
 Release:
 
-*   Merge a commit to master
-*   [CircleCI](https://circleci.com/gh/Financial-Times/workflows/prometheus-ecs-discovery) will build and deploy the commit.
+* Merge a commit to master
+* [CircleCI](https://circleci.com/gh/Financial-Times/workflows/prometheus-ecs-discovery) will build and deploy the commit.
 
 Rollback:
 
-*   Open CircleCI for this project: [circleci:prometheus-ecs-discovery](https://circleci.com/gh/Financial-Times/workflows/prometheus-ecs-discovery)
-*   Find the build of the commit which you wish to roll back to. The commit message is visible, and the `sha` of the commit is displayed to the right
-*   Click on `Rerun`, under the build status for each workflow
-*   Click `Rerun from beginning`
+* Open CircleCI for this project: [circleci:prometheus-ecs-discovery](https://circleci.com/gh/Financial-Times/workflows/prometheus-ecs-discovery)
+* Find the build of the commit which you wish to roll back to. The commit message is visible, and the `sha` of the commit is displayed to the right
+* Click on `Rerun`, under the build status for each workflow
+* Click `Rerun from beginning`
 
 <!-- Placeholder - remove HTML comment markers to activate
 ## Heroku Pipeline Name
@@ -150,7 +151,7 @@ The systems secrets are set at build time as parameters in the services Cloudfor
 
 They come from two sources:
 
-1.  The CircleCI environment variables for the CircleCI project.
-2.  The CircleCI context used in the [CircleCI config](.circleci/config.yml).
+1. The CircleCI environment variables for the CircleCI project.
+2. The CircleCI context used in the [CircleCI config](.circleci/config.yml).
 
 See the [README](README.md#prometheus-amazon-ecs-discovery) for more details.
