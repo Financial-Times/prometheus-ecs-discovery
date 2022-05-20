@@ -46,7 +46,7 @@ The service discovery component runs two containers per task: each collects serv
 
 ## Monitoring
 
-The Heimdall Prometheus has some bespoke alarms which are sent to the [#infra-delivery-alerts](https://financialtimes.slack.com/archives/C4U3YEZBJ) Slack via alertmanager.
+The Heimdall Prometheus has some bespoke alarms which are sent to Slack via alertmanager.
 
 These are visible in the [Alertmanager UI](https://alertmanager.monitoring.ftops.tech/) if they are firing.
 

@@ -194,7 +194,7 @@ workflows:
           requires:
             - deploy_test_service
           systemCode: "prometheus-ecs-discovery"
-          slackChannels: infra-delivery-builds
+          slackChannels: edo-alerts
           environment: "test"
           filters:
             branches:
@@ -217,7 +217,7 @@ workflows:
           requires:
             - deploy_prod_service
           systemCode: "prometheus-ecs-discovery"
-          slackChannels: infra-delivery-builds
+          slackChannels: edo-alerts
           environment: "prod"
           filters:
             branches:
