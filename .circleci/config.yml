@@ -161,7 +161,7 @@ workflows:
             - install
 
       - ft-snyk-orb/scan-go-packages:
-          context: monitoring-agg-ecs-prod
+          context: edo-snyk
           requires:
             - install
             - build-image
@@ -194,7 +194,7 @@ workflows:
           requires:
             - deploy_test_service
           systemCode: "prometheus-ecs-discovery"
-          slackChannels: infra-delivery-builds
+          slackChannels: edo-alerts
           environment: "test"
           filters:
             branches:
@@ -217,7 +217,7 @@ workflows:
           requires:
             - deploy_prod_service
           systemCode: "prometheus-ecs-discovery"
-          slackChannels: infra-delivery-builds
+          slackChannels: edo-alerts
           environment: "prod"
           filters:
             branches:
@@ -225,7 +225,7 @@ workflows:
                 - master
 
       - ft-snyk-orb/scan-and-monitor-go-packages:
-          context: monitoring-agg-ecs-prod
+          context: edo-snyk
           requires:
             - deploy_prod_service
           filters:
@@ -234,7 +234,7 @@ workflows:
                 - master
 
       - ft-snyk-orb/scan-and-monitor-docker-images:
-          context: monitoring-agg-ecs-prod
+          context: edo-snyk
           requires:
             - deploy_prod_service
           filters:
