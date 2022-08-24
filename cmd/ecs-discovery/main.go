@@ -165,7 +165,7 @@ func (t *AugmentedTask) ExporterInformation() []*PrometheusTaskInfo {
 		}
 		for _, iface := range t.EC2Instance.NetworkInterfaces {
 			if iface.PrivateIpAddress != nil && *iface.PrivateIpAddress != "" &&
-				strings.HasPrefix(*iface.Groups[0].GroupName, "mon-agg-ecs-ClusterInstanceSecurityGroup") {
+				strings.HasPrefix(*iface.Groups[0].GroupName, "mon-agg-ecs-") {
 				ip = *iface.PrivateIpAddress
 				break
 			}
