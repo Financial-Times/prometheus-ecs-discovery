@@ -14,6 +14,9 @@ DONE = printf '%b\n' ">> $(GREEN)$@ done ✓"
 DOCKER_FOLDER ?= monitoring-aggregation-ecs
 DOCKER_TAG ?= latest
 
+ARGS = --config.write-to=/tmp/out/ecs_file_sd.yml \
+			 --config.port-label=com.prometheus-ecs-discovery.port
+
 ifneq ("$(CIRCLE_SHA1)", "")
 VCS_SHA := $(CIRCLE_SHA1)
 else
@@ -84,9 +87,10 @@ run: ## Run the Docker image.
 	docker run \
 		-e AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) \
 		-e AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) \
+		-e AWS_SESSION_TOKEN=$(AWS_SESSION_TOKEN) \
 		-e AWS_REGION=$(AWS_REGION) \
-		-v $(PWD)/out:/root/out \
-		"financial-times/$(REPO_NAME):$(VCS_SHA)" $(ARGS) --config.write-to=out/ecs_file_sd.yml
+		-v $(PWD)/out:/tmp/out \
+		"financial-times/$(REPO_NAME):$(VCS_SHA)" $(ARGS)
 	@$(DONE)
 
 publish: ## Push the docker image to the FT private repository.

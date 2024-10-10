@@ -3,15 +3,14 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@0.1.13
   change-api: financial-times/change-api@0.22.0
-  ft-snyk-orb: financial-times/ft-snyk-orb@0
 
 executors:
   golang:
     docker:
-      - image: circleci/golang:1.17
+      - image: circleci/golang:1.22
   golang-node:
     docker:
-      - image: circleci/golang:1.17-node
+      - image: circleci/golang:1.22-node
   python-node:
     docker:
       - image: circleci/python:3.7-node
@@ -160,11 +159,6 @@ workflows:
           requires:
             - install
 
-      - ft-snyk-orb/scan-go-packages:
-          context: edo-snyk
-          requires:
-            - install
-            - build-image
 
       - publish-revision:
           context:
@@ -173,7 +167,6 @@ workflows:
           requires:
             - verify
             - build-image
-            - ft-snyk-orb/scan-go-packages
           filters:
             branches:
               only:
@@ -223,27 +216,3 @@ workflows:
             branches:
               only:
                 - master
-
-      - ft-snyk-orb/scan-and-monitor-go-packages:
-          context: edo-snyk
-          requires:
-            - deploy_prod_service
-          filters:
-            branches:
-              only:
-                - master
-
-      - ft-snyk-orb/scan-and-monitor-docker-images:
-          context: edo-snyk
-          requires:
-            - deploy_prod_service
-          filters:
-            branches:
-              only:
-                - master
-
-experimental:
-  notify:
-    branches:
-      only:
-        - master
