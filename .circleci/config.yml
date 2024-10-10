@@ -2,18 +2,18 @@ version: 2.1
 
 orbs:
   aws-cli: circleci/aws-cli@0.1.13
-  change-api: financial-times/change-api@0.22.0
+  change-api: financial-times/change-api@1
 
 executors:
   golang:
     docker:
-      - image: circleci/golang:1.22
+      - image: cimg/go:1.22
   golang-node:
     docker:
-      - image: circleci/golang:1.22-node
+      - image: cimg/go:1.22-node
   python-node:
     docker:
-      - image: circleci/python:3.7-node
+      - image: cimg/python:3.11-node
 
 commands:
   install_dependencies:
@@ -182,12 +182,12 @@ workflows:
               only:
                 - master
 
-      - change-api/release-log:
+      - change-api/change-log:
           context: monitoring-agg-ecs-test
           requires:
             - deploy_test_service
-          systemCode: "prometheus-ecs-discovery"
-          slackChannels: edo-alerts
+          system-code: "prometheus-ecs-discovery"
+          slack-channels: edo-alerts
           environment: "test"
           filters:
             branches:
@@ -205,12 +205,12 @@ workflows:
               only:
                 - master
 
-      - change-api/release-log:
+      - change-api/change-log:
           context: monitoring-agg-ecs-prod
           requires:
             - deploy_prod_service
-          systemCode: "prometheus-ecs-discovery"
-          slackChannels: edo-alerts
+          system-code: "prometheus-ecs-discovery"
+          slack-channels: edo-alerts
           environment: "prod"
           filters:
             branches:

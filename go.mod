@@ -11,6 +11,5 @@ require (
 
 require (
 	github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af // indirect
-	github.com/jstemmer/go-junit-report v1.0.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 )

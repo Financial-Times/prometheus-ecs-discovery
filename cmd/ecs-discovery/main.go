@@ -131,25 +131,26 @@ type PrometheusTaskInfo struct {
 // container in the task has a PROMETHEUS_EXPORTER_PORT
 //
 // Example:
-//     ...
-//             "Name": "apache",
-//             "DockerLabels": {
-//                  "PROMETHEUS_EXPORTER_PORT": "1234"
-//              },
-//     ...
-//              "PortMappings": [
-//                {
-//                  "ContainerPort": 1883,
-//                  "HostPort": 0,
-//                  "Protocol": "tcp"
-//                },
-//                {
-//                  "ContainerPort": 1234,
-//                  "HostPort": 0,
-//                  "Protocol": "tcp"
-//                }
-//              ],
-//     ...
+//
+//	...
+//	        "Name": "apache",
+//	        "DockerLabels": {
+//	             "PROMETHEUS_EXPORTER_PORT": "1234"
+//	         },
+//	...
+//	         "PortMappings": [
+//	           {
+//	             "ContainerPort": 1883,
+//	             "HostPort": 0,
+//	             "Protocol": "tcp"
+//	           },
+//	           {
+//	             "ContainerPort": 1234,
+//	             "HostPort": 0,
+//	             "Protocol": "tcp"
+//	           }
+//	         ],
+//	...
 func (t *AugmentedTask) ExporterInformation() []*PrometheusTaskInfo {
 	ret := []*PrometheusTaskInfo{}
 	var host string

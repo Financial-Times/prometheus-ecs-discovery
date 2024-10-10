@@ -15,7 +15,7 @@ DOCKER_FOLDER ?= monitoring-aggregation-ecs
 DOCKER_TAG ?= latest
 
 ARGS = --config.write-to=/tmp/out/ecs_file_sd.yml \
-			 --config.port-label=com.prometheus-ecs-discovery.port
+       --config.port-label=com.prometheus-ecs-discovery.port
 
 ifneq ("$(CIRCLE_SHA1)", "")
 VCS_SHA := $(CIRCLE_SHA1)
@@ -52,7 +52,7 @@ test: ## Run the tests 🚀.
 
 test-report: ## Run the tests and get junit output.
 	@printf '%b\n' ">> $(TEAL)running tests"
-	go get github.com/jstemmer/go-junit-report
+	go install github.com/jstemmer/go-junit-report@latest
 	mkdir -p ./test-results/go-tests
 	go test -v $(PACKAGES) | go-junit-report -set-exit-code > ./test-results/go-tests/go-test-report.xml
 	@$(DONE)
