@@ -1,4 +1,4 @@
-ARG GO_VERSION=1.17
+ARG GO_VERSION=1.22
 
 # Step 1: Install CA certificates and setup Go binary build
 FROM golang:${GO_VERSION}-alpine AS build
@@ -25,7 +25,7 @@ ENV CGO_ENABLED=0
 ENV GOOS=linux
 
 # Step 2: Build go binaries
-FROM build as go-build
+FROM build AS go-build
 
 RUN go build -o /tmp/bin/ecs-discovery -a cmd/ecs-discovery/main.go
 
