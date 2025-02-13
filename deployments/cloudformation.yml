@@ -24,6 +24,11 @@ Parameters:
     Type: String
     Description: The parent CF stack which contains the ECS cluster definition.
 
+  CloudsmithCredentialSecret:
+    Type: String
+    Description: The name of the secret in Secrets Manager that contains the Cloudsmith credentials.
+    Default: /edo/cloudsmith-read-only
+
   TaskRoleName:
     Type: String
     Description: The IAM role name with permissions to access the AWS ECS APIs.
@@ -34,6 +39,7 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: !Ref ServiceName
+      ExecutionRoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/FT-TaskExecutionRoleFor_mon-agg-ecs
       Volumes:
         - Name: efs-prometheus
           Host:
@@ -41,7 +47,9 @@ Resources:
       TaskRoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/${TaskRoleName}
       ContainerDefinitions:
         - Name: !Sub "${ServiceName}-eu-west-1-service"
-          Image: !Sub "nexus.in.ft.com:5000/monitoring-aggregation-ecs/${DockerImageName}:${DockerRevision}"
+          Image: !Sub "docker.packages.ft.com/financial-times-internal-releases/${DockerImageName}:${DockerRevision}"
+          RepositoryCredentials:
+            CredentialsParameter: !Ref CloudsmithCredentialSecret
           Command:
             - -config.scrape-interval=1m0s
             - -config.scrape-times=0
@@ -72,7 +80,9 @@ Resources:
               labels: org.opencontainers.revision,org.opencontainers.created,com.ft.build-number,com.ft.service-name,com.ft.service-region
 
         - Name: !Sub "${ServiceName}-us-east-1-service"
-          Image: !Sub "nexus.in.ft.com:5000/monitoring-aggregation-ecs/${DockerImageName}:${DockerRevision}"
+          Image: !Sub "docker.packages.ft.com/financial-times-internal-releases/${DockerImageName}:${DockerRevision}"
+          RepositoryCredentials:
+            CredentialsParameter: !Ref CloudsmithCredentialSecret
           Command:
             - -config.scrape-interval=1m0s
             - -config.scrape-times=0
