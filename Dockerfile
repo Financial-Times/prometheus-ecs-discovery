@@ -1,4 +1,4 @@
-ARG GO_VERSION=1.22
+ARG GO_VERSION=1.24
 
 # Step 1: Install CA certificates and setup Go binary build
 FROM golang:${GO_VERSION}-alpine AS build

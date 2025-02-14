@@ -11,7 +11,7 @@ UPPER_CASE_REPO_NAME = $(shell $(	REPO_NAME) | sed -r 's/\<./\U&/g')
 AWS := $(shell command aws --version 2> /dev/null)
 DONE = printf '%b\n' ">> $(GREEN)$@ done ✓"
 
-DOCKER_FOLDER ?= monitoring-aggregation-ecs
+DOCKER_FOLDER ?= financial-times-internal-releases
 DOCKER_TAG ?= latest
 
 ARGS = --config.write-to=/tmp/out/ecs_file_sd.yml \
@@ -95,8 +95,8 @@ run: ## Run the Docker image.
 
 publish: ## Push the docker image to the FT private repository.
 	@printf '%b\n' ">> $(TEAL)pushing the docker image"
-	docker tag "financial-times/$(REPO_NAME):$(VCS_SHA)" "nexus.in.ft.com:5000/$(DOCKER_FOLDER)/$(REPO_NAME):$(DOCKER_TAG)"
-	docker push "nexus.in.ft.com:5000/$(DOCKER_FOLDER)/$(REPO_NAME):$(DOCKER_TAG)"
+	docker tag "financial-times/$(REPO_NAME):$(VCS_SHA)" "docker.packages.ft.com/$(DOCKER_FOLDER)/$(REPO_NAME):$(DOCKER_TAG)"
+	docker push "docker.packages.ft.com/$(DOCKER_FOLDER)/$(REPO_NAME):$(DOCKER_TAG)"
 	@$(DONE)
 
 validate-aws-stack-command:
